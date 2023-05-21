@@ -1,9 +1,11 @@
+<template></template>
+
 <script lang="ts">
 import { defineComponent } from 'vue';
 
 import { useSceneStore } from './stores/scene.store';
 
-export const game = defineComponent({
+export default defineComponent({
     mounted(): void {
         useSceneStore().run();
     }

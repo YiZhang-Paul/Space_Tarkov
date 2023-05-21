@@ -1,8 +1,8 @@
-import { useRendererStore } from '../../../stores/renderer.store';
+import { useSceneStore } from '../../../stores/scene.store';
 import type { SolidObject } from '../world/solid-object';
 
 export class Camera {
-    private readonly _rendererStore = useRendererStore();
+    private readonly _sceneStore = useSceneStore();
     private _x = 0;
     private _y = 0;
 
@@ -15,9 +15,9 @@ export class Camera {
     }
 
     public focus(x: number, y: number): void {
-        const { viewWidth, viewHeight } = this._rendererStore;
-        this._x = x - viewWidth / 2;
-        this._y = y - viewHeight / 2;
+        const { cameraWidth, cameraHeight } = this._sceneStore;
+        this._x = x - cameraWidth / 2;
+        this._y = y - cameraHeight / 2;
     }
 
     public update(focus: SolidObject, objects: SolidObject[]): void {
