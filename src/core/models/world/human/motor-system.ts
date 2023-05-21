@@ -51,10 +51,10 @@ export class MotorSystem {
             this._counter = new MirroredCounter(state, 0.04);
         }
         else if (isInvalidCounter && state === HumanState.Walk) {
-            this._counter = new MirroredCounter(state, 0.08);
+            this._counter = new MirroredCounter(state, 0.05);
         }
         else if (isInvalidCounter && state === HumanState.Sprint) {
-            this._counter = new MirroredCounter(state, 0.15);
+            this._counter = new MirroredCounter(state, 0.08);
         }
 
         this._bodyParts.reset();

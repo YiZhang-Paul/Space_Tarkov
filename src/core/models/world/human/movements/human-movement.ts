@@ -12,30 +12,34 @@ export abstract class HumanMovement extends Movement<HumanBodyParts, HumanState>
         bodyParts.head.y = bodyParts.defaultHeadY + bodyMovement;
     }
 
-    protected swingLegs(maxAngle: number, bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
+    protected swingLegs(maxAngle: number, maxJump: number, bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
         const isRight = option.facing === Orientation.Right;
         const primary = isRight ? bodyParts.rightLeg : bodyParts.leftLeg;
         const secondary = isRight ? bodyParts.leftLeg : bodyParts.rightLeg;
 
-        if (counter.isForward && counter.progress <= 0.85) {
+        if (counter.isForward && counter.progress <= 0.6) {
+            bodyParts.graphics.y = maxJump;
             primary.angle = -maxAngle;
             primary.x = bodyParts.defaultRightLegX;
             secondary.angle = maxAngle;
             secondary.x = bodyParts.defaultLeftLegX;
         }
         else if (counter.isForward && counter.progress <= 1) {
+            bodyParts.graphics.y = maxJump / 2;
             primary.angle = 0;
             primary.x = bodyParts.defaultCenterX + (bodyParts.defaultRightLegX - bodyParts.defaultCenterX) / 3;
             secondary.angle = 0;
             secondary.x = bodyParts.defaultCenterX - (bodyParts.defaultCenterX - bodyParts.defaultLeftLegX) / 3;
         }
-        else if (!counter.isForward && counter.progress >= 0.15) {
+        else if (!counter.isForward && counter.progress >= 0.4) {
+            bodyParts.graphics.y = maxJump;
             primary.angle = maxAngle;
             primary.x = bodyParts.defaultLeftLegX;
             secondary.angle = -maxAngle;
             secondary.x = bodyParts.defaultRightLegX;
         }
         else {
+            bodyParts.graphics.y = maxJump / 2;
             primary.angle = 0;
             primary.x = bodyParts.defaultCenterX - (bodyParts.defaultCenterX - bodyParts.defaultLeftLegX) / 3;
             secondary.angle = 0;

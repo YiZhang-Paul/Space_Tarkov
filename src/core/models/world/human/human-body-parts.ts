@@ -74,6 +74,7 @@ export class HumanBodyParts extends BodyParts {
             child.scale.y = 1;
         }
 
+        this.graphics.y = 0;
         this.assemble();
         this.setLayerIndex();
     }
