@@ -17,7 +17,7 @@ export abstract class HumanMovement extends Movement<HumanBodyParts, HumanState>
         const primary = isRight ? bodyParts.rightLeg : bodyParts.leftLeg;
         const secondary = isRight ? bodyParts.leftLeg : bodyParts.rightLeg;
 
-        if (counter.isForward && counter.progress <= 0.7) {
+        if (counter.isForward && counter.progress <= 0.85) {
             primary.angle = -maxAngle;
             primary.x = bodyParts.defaultRightLegX;
             secondary.angle = maxAngle;
@@ -29,7 +29,7 @@ export abstract class HumanMovement extends Movement<HumanBodyParts, HumanState>
             secondary.angle = 0;
             secondary.x = bodyParts.defaultCenterX - (bodyParts.defaultCenterX - bodyParts.defaultLeftLegX) / 3;
         }
-        else if (!counter.isForward && counter.progress >= 0.3) {
+        else if (!counter.isForward && counter.progress >= 0.15) {
             primary.angle = maxAngle;
             primary.x = bodyParts.defaultLeftLegX;
             secondary.angle = -maxAngle;
