@@ -5,6 +5,8 @@ import { Coordinate } from '../core/models/generic/coordinate';
 import { Camera } from '../core/models/scene/camera';
 import { Human } from '../core/models/world/human/human';
 
+import { useControlStore } from './control.store';
+
 export const useSceneStore = defineStore('scene', {
     state: () => ({
         renderer: null! as Application,
@@ -39,6 +41,7 @@ export const useSceneStore = defineStore('scene', {
             }
 
             this.renderer = createRenderer();
+            useControlStore().registerEventListeners();
             this.player = new Human().initialize();
 
             this.renderer.ticker.add(() => {
