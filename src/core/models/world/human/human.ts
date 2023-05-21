@@ -12,7 +12,7 @@ export class Human extends SolidObject {
     private _states = new Stack([HumanState.Idle]);
 
     public initialize(): this {
-        this._motorSystem.initialize(this._graphics, this._sceneStore.cameraHeight * 0.02, this.orientation);
+        this._motorSystem.initialize(this._graphics, this._sceneStore.cameraHeight * 0.02);
         this._graphics.pivot.set(this._graphics.width / 2, this._graphics.height / 2);
         this._sceneStore.addToStage(this._graphics);
 
@@ -21,7 +21,7 @@ export class Human extends SolidObject {
 
     public update(): void {
         this.updateOrientation();
-        this._motorSystem.update(this.orientation);
+        this._motorSystem.update(this._states.peek(), this.orientation);
     }
 
     private updateOrientation(): void {

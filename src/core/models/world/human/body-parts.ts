@@ -1,3 +1,5 @@
+import type { Graphics } from 'pixijs';
+
 import { SolidObject } from '../solid-object';
 import { Orientation } from '../../../enums/orientation.enum';
 
@@ -8,6 +10,14 @@ export class BodyParts extends SolidObject {
     private _rightHand = this._sceneStore.createGraphics(0x2a31d7);
     private _leftLeg = this._sceneStore.createGraphics(0x2a31d7);
     private _rightLeg = this._sceneStore.createGraphics(0x2a31d7);
+
+    get head(): Graphics {
+        return this._head;
+    }
+
+    get trunk(): Graphics {
+        return this._trunk;
+    }
 
     get defaultHeadY(): number {
         return this._head.height / 2;

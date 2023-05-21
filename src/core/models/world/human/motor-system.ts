@@ -1,23 +1,34 @@
 import type { Graphics } from 'pixijs';
+
+import { MirroredCounter } from '../../generic/mirrored-counter';
+import { HumanState } from '../../../enums/human-state.enum';
 import { Orientation } from '../../../enums/orientation.enum';
 
 import { BodyParts } from './body-parts';
+import type { HumanMovement } from './movements/human-movement';
+import { IdleMovement } from './movements/idle-movement';
 
 export class MotorSystem {
     private readonly _orientationKeys = [Orientation.Left, Orientation.Right];
+    private readonly _movements = new Map<HumanState, HumanMovement>();
     private readonly _bodyPartsSet = new Map<Orientation, BodyParts>();
     private _bodyParts!: BodyParts;
+    private _counter!: MirroredCounter<HumanState>;
 
-    public initialize(humanGraphics: Graphics, headRadius: number, orientation: Orientation): void {
+    public initialize(humanGraphics: Graphics, headRadius: number): void {
         for (const key of this._orientationKeys) {
             const parts = new BodyParts().initialize(headRadius, key);
             this._bodyPartsSet.set(key, parts);
             humanGraphics.addChild(parts.graphics);
         }
+
+        this._movements.set(HumanState.Idle, new IdleMovement());
     }
 
-    public update(orientation: Orientation): void {
+    public update(state: HumanState, orientation: Orientation): void {
         this.updateOrientation(orientation);
+        this.updateCounter(state);
+        this._movements.get(state)!.update(this._bodyParts, this._counter);
     }
 
     private updateOrientation(orientation: Orientation): void {
@@ -26,5 +37,15 @@ export class MotorSystem {
         }
 
         this._bodyParts = this._bodyPartsSet.get(orientation)!;
+    }
+
+    private updateCounter(state: HumanState): void {
+        const isInvalidCounter = !this._counter || state !== this._counter.type;
+
+        if (isInvalidCounter && state === HumanState.Idle) {
+            this._counter = new MirroredCounter(state, 0.04);
+        }
+
+        this._counter.update();
     }
 }
