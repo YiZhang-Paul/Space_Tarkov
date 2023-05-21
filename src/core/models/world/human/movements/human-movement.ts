@@ -14,25 +14,32 @@ export abstract class HumanMovement extends Movement<HumanBodyParts, HumanState>
 
     protected swingLegs(bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
         const isRight = option.facing === Orientation.Right;
-        const [primary, secondary] = [isRight ? bodyParts.leftLeg : bodyParts.rightLeg, isRight ? bodyParts.rightLeg : bodyParts.leftLeg];
+        const primary = isRight ? bodyParts.rightLeg : bodyParts.leftLeg;
+        const secondary = isRight ? bodyParts.leftLeg : bodyParts.rightLeg;
 
-        if (counter.isForward && counter.progress <= 0.5) {
-            secondary.angle = 90 * counter.progress;
-            primary.angle = -90 * counter.progress;
+        if (counter.isForward && counter.progress <= 0.7) {
+            primary.angle = -25;
+            primary.x = bodyParts.defaultRightLegX;
+            secondary.angle = 25;
+            secondary.x = bodyParts.defaultLeftLegX;
         }
         else if (counter.isForward && counter.progress <= 1) {
-            secondary.angle = 90 * (1 - counter.progress);
-            primary.angle = -90 * (1 - counter.progress);
+            primary.angle = 0;
+            primary.x = bodyParts.defaultCenterX + (bodyParts.defaultRightLegX - bodyParts.defaultCenterX) / 3;
+            secondary.angle = 0;
+            secondary.x = bodyParts.defaultCenterX - (bodyParts.defaultCenterX - bodyParts.defaultLeftLegX) / 3;
         }
-        else if (!counter.isForward && counter.progress <= 0.5) {
-            secondary.angle = -90 * counter.progress;
-            primary.angle = 90 * counter.progress;
+        else if (!counter.isForward && counter.progress >= 0.3) {
+            primary.angle = 25;
+            primary.x = bodyParts.defaultLeftLegX;
+            secondary.angle = -25;
+            secondary.x = bodyParts.defaultRightLegX;
         }
         else {
-            secondary.angle = -90 * (1 - counter.progress);
-            primary.angle = 90 * (1 - counter.progress);
+            primary.angle = 0;
+            primary.x = bodyParts.defaultCenterX - (bodyParts.defaultCenterX - bodyParts.defaultLeftLegX) / 3;
+            secondary.angle = 0;
+            secondary.x = bodyParts.defaultCenterX + (bodyParts.defaultRightLegX - bodyParts.defaultCenterX) / 3;
         }
-
-        console.log(primary.angle, secondary.angle);
     }
 }

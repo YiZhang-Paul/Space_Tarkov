@@ -27,12 +27,32 @@ export class HumanBodyParts extends BodyParts {
         return this._rightLeg;
     }
 
+    get defaultCenterX(): number {
+        return (this._trunk.width + this._leftHand.width / 2 + this._rightHand.width / 2) / 2;
+    }
+
     get defaultHeadY(): number {
         return this._head.height / 2;
     }
 
+    get defaultTrunkLeftX(): number {
+        return this.defaultCenterX - this._trunk.width / 2;
+    }
+
+    get defaultTrunkRightX(): number {
+        return this.defaultCenterX + this._trunk.width / 2
+    }
+
     get defaultTrunkY(): number {
         return this._head.height + this._trunk.height / 2;
+    }
+
+    get defaultLeftLegX(): number {
+        return this.defaultTrunkLeftX + this._leftLeg.width / 2;
+    }
+
+    get defaultRightLegX(): number {
+        return this.defaultTrunkRightX - this._rightLeg.width / 2;
     }
 
     public initialize(headRadius: number, orientation: Orientation): this {
@@ -43,10 +63,19 @@ export class HumanBodyParts extends BodyParts {
         this.initializeHand(false);
         this.initializeLeg(true);
         this.initializeLeg(false);
-        this.assemble();
-        this.setLayerIndex();
+        this.reset();
 
         return this;
+    }
+
+    public reset(): void {
+        for (const child of this._graphics.children) {
+            child.angle = 0;
+            child.scale.y = 1;
+        }
+
+        this.assemble();
+        this.setLayerIndex();
     }
 
     private initializeHead(headRadius: number): void {
@@ -75,16 +104,13 @@ export class HumanBodyParts extends BodyParts {
 
     private assemble(): void {
         const isRight = this.orientation === Orientation.Right;
-        const center = (this._trunk.width + this._leftHand.width / 2 + this._rightHand.width / 2) / 2;
-        const trunkLeft = center - this._trunk.width / 2;
-        const trunkRight = center + this._trunk.width / 2;
         const trunkBottom = this._head.height + this._trunk.height;
-        this._head.position.set(center, this.defaultHeadY);
+        this._head.position.set(this.defaultCenterX, this.defaultHeadY);
         this._trunk.position.set(this._head.x, this.defaultTrunkY);
-        this._leftHand.position.set(trunkLeft, this._trunk.y + this._trunk.height / 15 * (isRight ? 1 : -1));
-        this._rightHand.position.set(trunkRight, this._trunk.y + this._trunk.height / 15 * (isRight ? -1 : 1));
-        this._leftLeg.position.set(trunkLeft + this._leftLeg.width / 2, trunkBottom - (isRight ? 0 : this._leftLeg.height / 10));
-        this._rightLeg.position.set(trunkRight - this._rightLeg.width / 2, trunkBottom - (isRight ? this._rightLeg.height / 10 : 0));
+        this._leftHand.position.set(this.defaultTrunkLeftX, this._trunk.y + this._trunk.height / 15 * (isRight ? 1 : -1));
+        this._rightHand.position.set(this.defaultTrunkRightX, this._trunk.y + this._trunk.height / 15 * (isRight ? -1 : 1));
+        this._leftLeg.position.set(this.defaultLeftLegX, trunkBottom - (isRight ? 0 : this._leftLeg.height / 10));
+        this._rightLeg.position.set(this.defaultRightLegX, trunkBottom - (isRight ? this._rightLeg.height / 10 : 0));
     }
 
     private setLayerIndex(): void {
