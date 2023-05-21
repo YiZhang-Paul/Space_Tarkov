@@ -3,13 +3,15 @@ import { Application, Graphics } from 'pixijs';
 
 import { Coordinate } from '../core/models/generic/coordinate';
 import { Camera } from '../core/models/scene/camera';
+import { Human } from '../core/models/world/human/human';
 
 export const useSceneStore = defineStore('scene', {
     state: () => ({
         renderer: null! as Application,
         camera: new Camera(),
         lastUpdate: 0,
-        threshold: 1000 / 60
+        updateThreshold: 1000 / 60,
+        player: null! as Human
     }),
     getters: {
         cameraWidth(): number {
@@ -37,15 +39,18 @@ export const useSceneStore = defineStore('scene', {
             }
 
             this.renderer = createRenderer();
+            this.player = new Human().initialize();
 
             this.renderer.ticker.add(() => {
                 const now = new Date().getTime();
 
-                if (now - this.lastUpdate < this.threshold) {
+                if (now - this.lastUpdate < this.updateThreshold) {
                     return;
                 }
 
                 this.lastUpdate = now;
+                this.player.update();
+                this.camera.update(this.player as Human, [this.player as Human]);
             });
         }
     }
