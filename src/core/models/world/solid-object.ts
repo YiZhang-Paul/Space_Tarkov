@@ -1,11 +1,14 @@
 import type { Graphics } from 'pixijs';
 
 import { useRendererStore } from '../../../stores/renderer.store';
+import { Orientation } from '../../enums/orientation.enum';
 
 export abstract class SolidObject {
     public x = 0;
     public y = 0;
-    protected readonly _graphics = useRendererStore().createGraphics();
+    public orientation = Orientation.Right;
+    protected readonly _rendererStore = useRendererStore();
+    protected readonly _graphics = this._rendererStore.createGraphics();
 
     constructor() {
         this._graphics.sortableChildren = true;
