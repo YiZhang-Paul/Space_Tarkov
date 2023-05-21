@@ -1,9 +1,9 @@
 import type { Graphics } from 'pixijs';
 
-import { SolidObject } from '../solid-object';
+import { BodyParts } from '../body-parts';
 import { Orientation } from '../../../enums/orientation.enum';
 
-export class BodyParts extends SolidObject {
+export class HumanBodyParts extends BodyParts {
     private _head = this._sceneStore.createGraphics();
     private _trunk = this._sceneStore.createGraphics();
     private _leftHand = this._sceneStore.createGraphics(0x2a31d7);

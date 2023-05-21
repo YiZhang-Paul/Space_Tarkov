@@ -4,20 +4,20 @@ import { MirroredCounter } from '../../generic/mirrored-counter';
 import { HumanState } from '../../../enums/human-state.enum';
 import { Orientation } from '../../../enums/orientation.enum';
 
-import { BodyParts } from './body-parts';
+import { HumanBodyParts } from './human-body-parts';
 import type { HumanMovement } from './movements/human-movement';
 import { IdleMovement } from './movements/idle-movement';
 
 export class MotorSystem {
     private readonly _orientationKeys = [Orientation.Left, Orientation.Right];
     private readonly _movements = new Map<HumanState, HumanMovement>();
-    private readonly _bodyPartsSet = new Map<Orientation, BodyParts>();
-    private _bodyParts!: BodyParts;
+    private readonly _bodyPartsSet = new Map<Orientation, HumanBodyParts>();
+    private _bodyParts!: HumanBodyParts;
     private _counter!: MirroredCounter<HumanState>;
 
     public initialize(humanGraphics: Graphics, headRadius: number): void {
         for (const key of this._orientationKeys) {
-            const parts = new BodyParts().initialize(headRadius, key);
+            const parts = new HumanBodyParts().initialize(headRadius, key);
             this._bodyPartsSet.set(key, parts);
             humanGraphics.addChild(parts.graphics);
         }
