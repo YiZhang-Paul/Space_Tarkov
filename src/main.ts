@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
-import App from './app.vue';
-import './assets/main.css';
+import { game } from './game.vue';
+import './assets/main.scss';
 
-createApp(App).use(createPinia()).mount('#app');
+createApp(game).use(createPinia()).mount('#game');
