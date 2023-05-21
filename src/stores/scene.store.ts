@@ -22,8 +22,8 @@ export const useSceneStore = defineStore('scene', {
         }
     },
     actions: {
-        createGraphics(): Graphics {
-            return new Graphics().beginFill(0xe09215);
+        createGraphics(color = 0xe09215): Graphics {
+            return new Graphics().beginFill(color);
         },
         addToStage(graphics: Graphics): void {
             this.renderer.stage.addChild(graphics);
