@@ -1,6 +1,7 @@
 import type { Graphics } from 'pixijs';
 
 import { MirroredCounter } from '../../generic/mirrored-counter';
+import type { MoveOption } from '../move-option';
 import { HumanState } from '../../../enums/human-state.enum';
 import { Orientation } from '../../../enums/orientation.enum';
 
@@ -25,10 +26,10 @@ export class MotorSystem {
         this._movements.set(HumanState.Idle, new IdleMovement());
     }
 
-    public update(state: HumanState, orientation: Orientation): void {
-        this.updateOrientation(orientation);
+    public update(state: HumanState, option: MoveOption): void {
+        this.updateOrientation(option.facing);
         this.updateCounter(state);
-        this._movements.get(state)!.update(this._bodyParts, this._counter);
+        this._movements.get(state)!.update(this._bodyParts, this._counter, option);
     }
 
     private updateOrientation(orientation: Orientation): void {

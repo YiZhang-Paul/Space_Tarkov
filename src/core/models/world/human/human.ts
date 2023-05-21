@@ -1,5 +1,6 @@
 import { useControlStore } from '../../../../stores/control.store';
 import { Stack } from '../../generic/stack';
+import { MoveOption } from '../move-option';
 import { SolidObject } from '../solid-object';
 import { HumanState } from '../../../enums/human-state.enum';
 import { Orientation } from '../../../enums/orientation.enum';
@@ -21,7 +22,7 @@ export class Human extends SolidObject {
 
     public update(): void {
         this.updateOrientation();
-        this._motorSystem.update(this._states.peek(), this.orientation);
+        this._motorSystem.update(this._states.peek(), new MoveOption(this.orientation, this.orientation));
     }
 
     private updateOrientation(): void {
