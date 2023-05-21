@@ -18,13 +18,16 @@ export const useRendererStore = defineStore('renderer', {
         }
     },
     actions: {
-        createGraphics(): Graphics {
-            return new Graphics().beginFill(0xe09215);
-        },
         getGlobalCoordinate(graphics: Graphics): Coordinate {
             const { x, y } = graphics.toGlobal({ x: 0, y: 0 });
 
             return new Coordinate(x + this.camera.x, y + this.camera.y);
+        },
+        createGraphics(): Graphics {
+            return new Graphics().beginFill(0xe09215);
+        },
+        addToStage(graphics: Graphics): void {
+            this.renderer.stage.addChild(graphics);
         }
     }
 });

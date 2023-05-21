@@ -18,6 +18,14 @@ export abstract class SolidObject {
         return this._graphics;
     }
 
+    get visible(): boolean {
+        return this._graphics.visible;
+    }
+
+    set visible(value: boolean) {
+        this._graphics.visible = value;
+    }
+
     protected drawDebugGrid(): void {
         this._graphics.clear();
         this._graphics.beginFill(0x464646);
