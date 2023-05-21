@@ -6,8 +6,8 @@ import { Orientation } from '../../../enums/orientation.enum';
 export class HumanBodyParts extends BodyParts {
     private _head = this._sceneStore.createGraphics();
     private _trunk = this._sceneStore.createGraphics();
-    private _leftHand = this._sceneStore.createGraphics(0x2a31d7);
-    private _rightHand = this._sceneStore.createGraphics(0x2a31d7);
+    private _leftHand = this._sceneStore.createGraphics(0xef74e2);
+    private _rightHand = this._sceneStore.createGraphics(0xef74e2);
     private _leftLeg = this._sceneStore.createGraphics(0x2a31d7);
     private _rightLeg = this._sceneStore.createGraphics(0x2a31d7);
 
