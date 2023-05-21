@@ -19,6 +19,14 @@ export class HumanBodyParts extends BodyParts {
         return this._trunk;
     }
 
+    get leftLeg(): Graphics {
+        return this._leftLeg;
+    }
+
+    get rightLeg(): Graphics {
+        return this._rightLeg;
+    }
+
     get defaultHeadY(): number {
         return this._head.height / 2;
     }

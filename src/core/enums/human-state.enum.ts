@@ -1,3 +1,4 @@
 export enum HumanState {
-    Idle
+    Idle,
+    Walk
 }
