@@ -9,6 +9,7 @@ import { HumanBodyParts } from './human-body-parts';
 import type { HumanMovement } from './movements/human-movement';
 import { IdleMovement } from './movements/idle-movement';
 import { WalkMovement } from './movements/walk-movement';
+import { SprintMovement } from './movements/sprint-movement';
 
 export class MotorSystem {
     private readonly _orientationKeys = [Orientation.Left, Orientation.Right];
@@ -26,6 +27,7 @@ export class MotorSystem {
 
         this._movements.set(HumanState.Idle, new IdleMovement());
         this._movements.set(HumanState.Walk, new WalkMovement());
+        this._movements.set(HumanState.Sprint, new SprintMovement());
     }
 
     public update(state: HumanState, option: MoveOption): void {
@@ -50,6 +52,9 @@ export class MotorSystem {
         }
         else if (isInvalidCounter && state === HumanState.Walk) {
             this._counter = new MirroredCounter(state, 0.06);
+        }
+        else if (isInvalidCounter && state === HumanState.Sprint) {
+            this._counter = new MirroredCounter(state, 0.12);
         }
 
         this._bodyParts.reset();
