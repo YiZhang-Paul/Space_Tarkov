@@ -22,7 +22,7 @@ export const useControlStore = defineStore('control', {
             return <T>(pairs: KeyValuePair<string, T>[]): KeyValuePair<string, T> | null => {
                 let last: KeyValuePair<string, T> | null = null;
 
-                for (const pair of pairs.filter(_ => this.keyPressed.has(_.key))) {
+                for (const pair of pairs.filter(keyValuePair => this.keyPressed.has(keyValuePair.key))) {
                     if (!last) {
                         last = pair;
                     }
@@ -44,10 +44,10 @@ export const useControlStore = defineStore('control', {
             this.isRegistered = true;
             document.addEventListener('contextmenu', event => event.preventDefault());
             document.addEventListener('mousemove', event => this.pointer = new Coordinate(event.clientX, event.clientY));
-            document.addEventListener('mousedown', _ => onKeyDown(getMouseKey(_.button, this.controlKeys), this.keyPressed));
-            document.addEventListener('mouseup', _ => this.keyPressed.delete(getMouseKey(_.button, this.controlKeys)));
-            document.addEventListener('keyup', _ => this.keyPressed.delete(_.code));
-            document.addEventListener('keydown', _ => onKeyDown(_.code, this.keyPressed));
+            document.addEventListener('mousedown', event => onKeyDown(getMouseKey(event.button, this.controlKeys), this.keyPressed));
+            document.addEventListener('mouseup', event => this.keyPressed.delete(getMouseKey(event.button, this.controlKeys)));
+            document.addEventListener('keyup', event => this.keyPressed.delete(event.code));
+            document.addEventListener('keydown', event => onKeyDown(event.code, this.keyPressed));
         }
     }
 });
