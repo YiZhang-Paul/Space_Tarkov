@@ -1,5 +1,8 @@
 export enum HumanState {
     Idle,
     Walk,
-    Sprint
+    Sprint,
+    Boosting,
+    Boosted,
+    FreeFall
 }

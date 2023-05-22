@@ -14,6 +14,8 @@ export class Human extends SolidObject {
 
     public initialize(): this {
         this._motorSystem.initialize(this._graphics, this._sceneStore.cameraHeight * 0.02);
+        this._motorSystem.onBoostingCompleted = () => this._states.swap(HumanState.Boosted);
+        this._motorSystem.onFreeFallCompleted = () => this._states.pop();
         this._graphics.pivot.set(this._graphics.width / 2, this._graphics.height / 2);
         this._sceneStore.addToStage(this._graphics);
 
@@ -22,7 +24,7 @@ export class Human extends SolidObject {
 
     public update(): void {
         this.updateOrientation();
-        this._motorSystem.update(this._states.peek(), new MoveOption(this.orientation, this.orientation));
+        this.updateMovement();
     }
 
     private updateOrientation(): void {
@@ -36,5 +38,11 @@ export class Human extends SolidObject {
         const angle = Math.atan2(targetY - sourceY, targetX - sourceX) * 180 / Math.PI;
         const isRight = (angle > 0 && angle <= 90) || (angle > -90 && angle <= 0);
         this.orientation = isRight ? Orientation.Right : Orientation.Left;
+    }
+
+    private updateMovement(): void {
+        const boostHeight = this._sceneStore.cameraHeight / 30;
+        const option = new MoveOption(this.orientation, this.orientation, boostHeight);
+        this._motorSystem.update(this._states.peek(), option);
     }
 }
