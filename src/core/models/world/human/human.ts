@@ -5,12 +5,11 @@ import { MoveOption } from '../move-option';
 import { SolidObject } from '../solid-object';
 import { HumanState } from '../../../enums/human-state.enum';
 import { Orientation } from '../../../enums/orientation.enum';
-
-import { MotorSystem } from './motor-system';
+import { HumanMotorSystem } from '../../../services/human-motor-system';
 
 export class Human extends SolidObject {
     private readonly _controlStore = useControlStore();
-    private readonly _motorSystem = new MotorSystem();
+    private readonly _motorSystem = new HumanMotorSystem();
     private _states = new Stack([HumanState.Idle]);
 
     public initialize(): this {

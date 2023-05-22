@@ -1,22 +1,22 @@
 import type { Graphics } from 'pixijs';
 
-import type { ICounter } from '../../../interfaces/counter.interface';
-import { SimpleCounter } from '../../generic/simple-counter';
-import { MirroredCounter } from '../../generic/mirrored-counter';
-import type { MoveOption } from '../move-option';
-import { HumanState } from '../../../enums/human-state.enum';
-import { Orientation } from '../../../enums/orientation.enum';
+import type { ICounter } from '../interfaces/counter.interface';
+import { SimpleCounter } from '../models/generic/simple-counter';
+import { MirroredCounter } from '../models/generic/mirrored-counter';
+import type { MoveOption } from '../models/world/move-option';
+import { HumanState } from '../enums/human-state.enum';
+import { Orientation } from '../enums/orientation.enum';
 
-import { HumanBodyParts } from './human-body-parts';
-import type { HumanMovement } from './movements/human-movement';
-import { IdleMovement } from './movements/idle-movement';
-import { WalkMovement } from './movements/walk-movement';
-import { SprintMovement } from './movements/sprint-movement';
-import { BoostingMovement } from './movements/boosting-movement';
-import { BoostedMovement } from './movements/boosted-movement';
-import { FreeFallMovement } from './movements/free-fall-movement';
+import { HumanBodyParts } from '../models/world/human/human-body-parts';
+import type { HumanMovement } from '../models/world/human/movements/human-movement';
+import { IdleMovement } from '../models/world/human/movements/idle-movement';
+import { WalkMovement } from '../models/world/human/movements/walk-movement';
+import { SprintMovement } from '../models/world/human/movements/sprint-movement';
+import { BoostingMovement } from '../models/world/human/movements/boosting-movement';
+import { BoostedMovement } from '../models/world/human/movements/boosted-movement';
+import { FreeFallMovement } from '../models/world/human/movements/free-fall-movement';
 
-export class MotorSystem {
+export class HumanMotorSystem {
     public onBoostingCompleted?: () => void;
     public onFreeFallCompleted?: () => void;
     private readonly _orientationKeys = [Orientation.Left, Orientation.Right];
