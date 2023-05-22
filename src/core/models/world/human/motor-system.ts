@@ -73,7 +73,7 @@ export class MotorSystem {
             this._counter = new MirroredCounter(state, 0.05);
         }
         else if (isInvalidCounter && state === HumanState.FreeFall) {
-            this._counter = new SimpleCounter(state, 0.03);
+            this._counter = new SimpleCounter(state, 0.05);
         }
 
         this._bodyParts.reset();

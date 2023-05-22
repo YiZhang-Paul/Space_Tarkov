@@ -13,8 +13,7 @@ export class FreeFallMovement extends HumanMovement<SimpleCounter<HumanState>> {
     }
 
     private fall(bodyParts: HumanBodyParts, counter: SimpleCounter<HumanState>, option: MoveOption): void {
-        if (bodyParts.graphics.y > 0) {
-            bodyParts.graphics.y += option.boostHeight * counter.progress;
-        }
+        bodyParts.graphics.y -= option.boostHeight;
+        bodyParts.graphics.y += option.boostHeight * counter.progress;
     }
 }
