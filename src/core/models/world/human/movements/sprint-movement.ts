@@ -5,7 +5,7 @@ import type { HumanState } from '../../../../enums/human-state.enum';
 
 import { HumanMovement } from './human-movement';
 
-export class SprintMovement extends HumanMovement {
+export class SprintMovement extends HumanMovement<MirroredCounter<HumanState>> {
 
     public update(bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
         this.breath(bodyParts, bodyParts.trunk.height / 10 * counter.progress);

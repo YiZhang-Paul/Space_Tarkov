@@ -1,7 +1,5 @@
-import type { MirroredCounter } from '../generic/mirrored-counter';
-
 import type { MoveOption } from './move-option';
 
-export abstract class Movement<TBodyParts, TState> {
-    public abstract update(bodyParts: TBodyParts, counter: MirroredCounter<TState>, option: MoveOption): void;
+export abstract class Movement<TBodyParts, TCounter> {
+    public abstract update(bodyParts: TBodyParts, counter: TCounter | null, option: MoveOption): void;
 }

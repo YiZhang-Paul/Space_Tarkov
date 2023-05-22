@@ -1,5 +1,7 @@
 import type { Graphics } from 'pixijs';
 
+import type { ICounter } from '../../../interfaces/counter.interface';
+import { SimpleCounter } from '../../generic/simple-counter';
 import { MirroredCounter } from '../../generic/mirrored-counter';
 import type { MoveOption } from '../move-option';
 import { HumanState } from '../../../enums/human-state.enum';
@@ -13,10 +15,10 @@ import { SprintMovement } from './movements/sprint-movement';
 
 export class MotorSystem {
     private readonly _orientationKeys = [Orientation.Left, Orientation.Right];
-    private readonly _movements = new Map<HumanState, HumanMovement>();
+    private readonly _movements = new Map<HumanState, HumanMovement<ICounter<HumanState>>>();
     private readonly _bodyPartsSet = new Map<Orientation, HumanBodyParts>();
     private _bodyParts!: HumanBodyParts;
-    private _counter!: MirroredCounter<HumanState>;
+    private _counter!: ICounter<HumanState>;
 
     public initialize(humanGraphics: Graphics, headRadius: number): void {
         for (const key of this._orientationKeys) {
