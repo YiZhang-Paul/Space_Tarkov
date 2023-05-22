@@ -1,30 +1,20 @@
 import { useControlStore } from '../../../../stores/control.store';
-import { Stack } from '../../generic/stack';
 import { KeyValuePair } from '../../generic/key-value-pair';
 import { MoveOption } from '../move-option';
 import { SolidObject } from '../solid-object';
-import { HumanState } from '../../../enums/human-state.enum';
 import { Orientation } from '../../../enums/orientation.enum';
 import { HumanMotorSystem } from '../../../services/human-motor-system';
+import { HumanStateMachine } from '../../../services/human-state-machine';
 
 export class Human extends SolidObject {
     private readonly _controlStore = useControlStore();
     private readonly _motorSystem = new HumanMotorSystem();
-    private _states = new Stack([HumanState.Idle]);
+    private readonly _stateMachine = new HumanStateMachine();
 
     public initialize(): this {
         this._motorSystem.initialize(this._graphics, this._sceneStore.cameraHeight * 0.02);
-
-        this._motorSystem.onBoostingCompleted = () => {
-            if (this._controlStore.isBoostKeyPressed) {
-                this._states.swap(HumanState.Boosted);
-            }
-            else {
-                this._states.pop();
-            }
-        };
-
-        this._motorSystem.onFreeFallCompleted = () => this._states.pop();
+        this._motorSystem.onBoostingCompleted = this._stateMachine.onBoostingCompleted.bind(this._stateMachine);
+        this._motorSystem.onFreeFallCompleted = this._stateMachine.onFreeFallCompleted.bind(this._stateMachine);
         this._graphics.pivot.set(this._graphics.width / 2, this._graphics.height / 2);
         this._sceneStore.addToStage(this._graphics);
 
@@ -51,68 +41,14 @@ export class Human extends SolidObject {
     }
 
     private updateState(): void {
-        const state = this._states.peek();
-
-        if (state === HumanState.Boosting || state === HumanState.FreeFall) {
-            return;
-        }
-
-        if (this._controlStore.isBoostKeyPressed) {
-
-            if (state === HumanState.Boosted) {
-                return;
-            }
-
-            this._states.push(HumanState.FreeFall);
-            this._states.push(HumanState.Boosting);
-
-            return;
-        }
-
-        if (state === HumanState.Boosted) {
-            this._states.pop();
-
-            return;
-        }
-
         const direction = this.getMovingDirection();
-
-        if (!direction) {
-
-            if (state === HumanState.Idle) {
-                return;
-            }
-
-            this._states.pop();
-
-            return;
-        }
-
-        if (this._controlStore.isSprintKeyPressed) {
-
-            if (state === HumanState.Sprint) {
-                return;
-            }
-
-            if (state === HumanState.Idle) {
-                this._states.push(HumanState.Sprint);
-            }
-            else {
-                this._states.swap(HumanState.Sprint);
-            }
-
-            return;
-        }
-
-        if (state === HumanState.Idle) {
-            this._states.push(HumanState.Walk);
-        }
+        this._stateMachine.update(direction);
     }
 
     private updateMovement(): void {
         const boostHeight = this._sceneStore.cameraHeight / 30;
         const option = new MoveOption(this.orientation, this.getMovingDirection(), boostHeight);
-        this._motorSystem.update(this._states.peek(), option);
+        this._motorSystem.update(this._stateMachine.state, option);
     }
 
     private getMovingDirection(): Orientation | null {
