@@ -74,9 +74,9 @@ export class HumanBodyParts extends BodyParts {
             child.scale.y = 1;
         }
 
-        this.graphics.y = 0;
         this.assemble();
         this.setLayerIndex();
+        this.initializeParentContainer();
     }
 
     private initializeHead(headRadius: number): void {
@@ -101,6 +101,12 @@ export class HumanBodyParts extends BodyParts {
         leg.drawRect(0, 0, this._trunk.width / 5 * 2, this._trunk.height / 5 * 4);
         leg.pivot.set(leg.width / 2);
         this._graphics.addChild(leg);
+    }
+
+    private initializeParentContainer(): void {
+        this.graphics.angle = 0;
+        this.graphics.y = 0;
+        this.graphics.pivot.set(this.graphics.width / 2, this.graphics.height / 2);
     }
 
     private assemble(): void {
