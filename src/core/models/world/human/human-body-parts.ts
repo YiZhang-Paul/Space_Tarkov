@@ -19,6 +19,14 @@ export class HumanBodyParts extends BodyParts {
         return this._trunk;
     }
 
+    get leftHand(): Graphics {
+        return this._leftHand;
+    }
+
+    get rightHand(): Graphics {
+        return this._rightHand;
+    }
+
     get leftLeg(): Graphics {
         return this._leftLeg;
     }
@@ -93,6 +101,7 @@ export class HumanBodyParts extends BodyParts {
     private initializeHand(isLeft: boolean): void {
         const hand = isLeft ? this._leftHand : this._rightHand;
         hand.drawCircle(0, 0, this._head.height / 5);
+        hand.pivot.y = -hand.height;
         this._graphics.addChild(hand);
     }
 
@@ -114,8 +123,8 @@ export class HumanBodyParts extends BodyParts {
         const trunkBottom = this._head.height + this._trunk.height;
         this._head.position.set(this.defaultCenterX, this.defaultHeadY);
         this._trunk.position.set(this._head.x, this.defaultTrunkY);
-        this._leftHand.position.set(this.defaultTrunkLeftX, this._trunk.y + this._trunk.height / 15 * (isRight ? 1 : -1));
-        this._rightHand.position.set(this.defaultTrunkRightX, this._trunk.y + this._trunk.height / 15 * (isRight ? -1 : 1));
+        this._leftHand.position.set(this.defaultTrunkLeftX, this._head.height - this._trunk.height / 15 * (isRight ? -1 : 1));
+        this._rightHand.position.set(this.defaultTrunkRightX, this._head.height - this._trunk.height / 15 * (isRight ? 1 : -1));
         this._leftLeg.position.set(this.defaultLeftLegX, trunkBottom - (isRight ? 0 : this._leftLeg.height / 10));
         this._rightLeg.position.set(this.defaultRightLegX, trunkBottom - (isRight ? this._rightLeg.height / 10 : 0));
     }

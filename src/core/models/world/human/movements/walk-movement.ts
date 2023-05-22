@@ -9,6 +9,7 @@ export class WalkMovement extends HumanMovement<MirroredCounter<HumanState>> {
 
     public update(bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
         this.breath(bodyParts, bodyParts.trunk.height / 20 * counter.progress);
+        this.swingHands(60, bodyParts, counter, option);
         this.swingLegs(15, bodyParts.trunk.height / 50, bodyParts, counter, option);
     }
 }

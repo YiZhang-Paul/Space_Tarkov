@@ -16,5 +16,7 @@ export class BoostedMovement extends HumanMovement<MirroredCounter<HumanState>> 
     private fly(bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
         bodyParts.graphics.y -= option.boostHeight;
         bodyParts.graphics.y += bodyParts.trunk.height / 3 * counter.progress;
+        bodyParts.leftHand.x -= (bodyParts.leftHand.x - bodyParts.trunk.x) / 2;
+        bodyParts.rightHand.x -= (bodyParts.rightHand.x - bodyParts.trunk.x) / 2;
     }
 }

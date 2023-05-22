@@ -28,6 +28,29 @@ export abstract class HumanMovement<T> extends Movement<HumanBodyParts, T> {
         bodyParts.head.y = bodyParts.defaultHeadY + bodyMovement;
     }
 
+    protected swingHands(maxAngle: number, bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
+        const isRight = option.facing === Orientation.Right;
+        const primary = isRight ? bodyParts.rightHand : bodyParts.leftHand;
+        const secondary = isRight ? bodyParts.leftHand : bodyParts.rightHand;
+
+        if (counter.isForward && counter.progress <= 0.5) {
+            secondary.angle = maxAngle * counter.progress;
+            primary.angle = -maxAngle * counter.progress;
+        }
+        else if (counter.isForward && counter.progress <= 1) {
+            secondary.angle = maxAngle * (1 - counter.progress);
+            primary.angle = -maxAngle * (1 - counter.progress);
+        }
+        else if (!counter.isForward && counter.progress <= 0.5) {
+            secondary.angle = -maxAngle * counter.progress;
+            primary.angle = maxAngle * counter.progress;
+        }
+        else {
+            secondary.angle = -maxAngle * (1 - counter.progress);
+            primary.angle = maxAngle * (1 - counter.progress);
+        }
+    }
+
     protected swingLegs(maxAngle: number, maxJump: number, bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
         const isRight = option.facing === Orientation.Right;
         const primary = isRight ? bodyParts.rightLeg : bodyParts.leftLeg;

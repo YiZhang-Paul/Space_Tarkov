@@ -9,6 +9,7 @@ export class SprintMovement extends HumanMovement<MirroredCounter<HumanState>> {
 
     public update(bodyParts: HumanBodyParts, counter: MirroredCounter<HumanState>, option: MoveOption): void {
         this.breath(bodyParts, bodyParts.trunk.height / 10 * counter.progress);
+        this.swingHands(75, bodyParts, counter, option);
         this.swingLegs(45, bodyParts.trunk.height / 10, bodyParts, counter, option);
     }
 }

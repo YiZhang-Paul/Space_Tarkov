@@ -15,5 +15,7 @@ export class BoostingMovement extends HumanMovement<SimpleCounter<HumanState>> {
 
     private flyUp(bodyParts: HumanBodyParts, counter: SimpleCounter<HumanState>, option: MoveOption): void {
         bodyParts.graphics.y -= option.boostHeight * counter.progress;
+        bodyParts.leftHand.x -= (bodyParts.leftHand.x - bodyParts.trunk.x) / 2;
+        bodyParts.rightHand.x -= (bodyParts.rightHand.x - bodyParts.trunk.x) / 2;
     }
 }
