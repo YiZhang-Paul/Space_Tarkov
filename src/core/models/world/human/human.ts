@@ -1,17 +1,38 @@
 import { useControlStore } from '../../../../stores/control.store';
-import { KeyValuePair } from '../../generic/key-value-pair';
-import { MoveOption } from '../move-option';
-import { SolidObject } from '../solid-object';
-import { Orientation } from '../../../enums/orientation.enum';
 import { HumanMotorSystem } from '../../../services/human-motor-system';
 import { HumanStateMachine } from '../../../services/human-state-machine';
+import { KeyValuePair } from '../../generic/key-value-pair';
+import { Creature } from '../creature';
+import { MoveOption } from '../move-option';
+import { Orientation } from '../../../enums/orientation.enum';
+import { HumanState } from '../../../enums/human-state.enum';
 
-export class Human extends SolidObject {
+export class Human extends Creature {
     private readonly _controlStore = useControlStore();
     private readonly _motorSystem = new HumanMotorSystem();
     private readonly _stateMachine = new HumanStateMachine();
 
+    get speed(): number {
+        const { state } = this._stateMachine;
+
+        if (state === HumanState.Boosted) {
+            return this._baseSprintSpeed * 2;
+        }
+
+        if (state === HumanState.Sprint) {
+            return this._baseSprintSpeed;
+        }
+
+        if (state === HumanState.Walk) {
+            return this._baseWalkSpeed;
+        }
+
+        return 0;
+    }
+
     public initialize(): this {
+        this._baseWalkSpeed = this._sceneStore.cameraHeight * 0.002;
+        this._baseSprintSpeed = this._sceneStore.cameraHeight * 0.005;
         this._motorSystem.initialize(this._graphics, this._sceneStore.cameraHeight * 0.02);
         this._motorSystem.onBoostingCompleted = this._stateMachine.onBoostingCompleted.bind(this._stateMachine);
         this._motorSystem.onFreeFallCompleted = this._stateMachine.onFreeFallCompleted.bind(this._stateMachine);
@@ -24,6 +45,7 @@ export class Human extends SolidObject {
     public update(): void {
         this.updateOrientation();
         this.updateState();
+        this.updatePosition();
         this.updateMovement();
     }
 
@@ -43,6 +65,28 @@ export class Human extends SolidObject {
     private updateState(): void {
         const direction = this.getMovingDirection();
         this._stateMachine.update(direction);
+    }
+
+    private updatePosition(): void {
+        const direction = this.getMovingDirection();
+
+        if (!direction) {
+            return;
+        }
+
+        if ([Orientation.Up, Orientation.UpLeft, Orientation.UpRight].includes(direction)) {
+            this.y -= this.speed;
+        }
+        else if ([Orientation.Down, Orientation.DownLeft, Orientation.DownRight].includes(direction)) {
+            this.y += this.speed;
+        }
+
+        if ([Orientation.Left, Orientation.UpLeft, Orientation.DownLeft].includes(direction)) {
+            this.x -= this.speed;
+        }
+        else if ([Orientation.Right, Orientation.UpRight, Orientation.DownRight].includes(direction)) {
+            this.x += this.speed;
+        }
     }
 
     private updateMovement(): void {
