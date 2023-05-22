@@ -25,64 +25,89 @@ export class HumanStateMachine {
     }
 
     public update(direction: Orientation | null): void {
-        const state = this._states.peek();
-
-        if (state === HumanState.Boosting || state === HumanState.FreeFall) {
+        if (this.checkLockedStates()) {
             return;
         }
 
-        if (this._controlStore.isBoostKeyPressed) {
-
-            if (state === HumanState.Boosted) {
-                return;
-            }
-
-            if (state === HumanState.Idle) {
-                this._states.push(HumanState.FreeFall);
-            }
-            else {
-                this._states.swap(HumanState.FreeFall);
-            }
-
-            this._states.push(HumanState.Boosting);
-
+        if (this.checkBoosterStates()) {
             return;
         }
 
-        if (state === HumanState.Boosted) {
+        if (this.checkIdleState(direction)) {
+            return;
+        }
+
+        if (this.checkSprintState()) {
+            return;
+        }
+
+        this.checkWalkState();
+    }
+
+    private checkLockedStates(): boolean {
+        return [HumanState.Boosting, HumanState.FreeFall].includes(this._states.peek());
+    }
+
+    private checkBoosterStates(): boolean {
+        if (this._states.peek() === HumanState.Boosted && !this._controlStore.isBoostKeyPressed) {
             this._states.pop();
 
-            return;
+            return true;
         }
 
-        if (!direction) {
+        if (!this._controlStore.isBoostKeyPressed) {
+            return false;
+        }
 
-            if (state === HumanState.Idle) {
-                return;
-            }
+        if (this._states.peek() === HumanState.Boosted) {
+            return true;
+        }
 
+        if (this._states.peek() === HumanState.Idle) {
+            this._states.push(HumanState.FreeFall);
+        }
+        else {
+            this._states.swap(HumanState.FreeFall);
+        }
+
+        this._states.push(HumanState.Boosting);
+
+        return true;
+    }
+
+    private checkIdleState(direction: Orientation | null): boolean {
+        if (direction) {
+            return false;
+        }
+
+        if (this._states.peek() !== HumanState.Idle) {
             this._states.pop();
-
-            return;
         }
 
-        if (this._controlStore.isSprintKeyPressed) {
+        return true;
+    }
 
-            if (state === HumanState.Sprint) {
-                return;
-            }
-
-            if (state === HumanState.Idle) {
-                this._states.push(HumanState.Sprint);
-            }
-            else {
-                this._states.swap(HumanState.Sprint);
-            }
-
-            return;
+    private checkSprintState(): boolean {
+        if (!this._controlStore.isSprintKeyPressed) {
+            return false;
         }
 
-        if (state === HumanState.Idle) {
+        if (this._states.peek() === HumanState.Sprint) {
+            return true;
+        }
+
+        if (this._states.peek() === HumanState.Idle) {
+            this._states.push(HumanState.Sprint);
+        }
+        else {
+            this._states.swap(HumanState.Sprint);
+        }
+
+        return true;
+    }
+
+    private checkWalkState(): void {
+        if (this._states.peek() === HumanState.Idle) {
             this._states.push(HumanState.Walk);
         }
         else {
