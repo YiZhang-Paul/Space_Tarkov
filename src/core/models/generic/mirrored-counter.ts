@@ -1,4 +1,6 @@
-export class MirroredCounter<T> {
+import type { ICounter } from '../../interfaces/counter.interface';
+
+export class MirroredCounter<T> implements ICounter<T> {
     public type!: T;
     private readonly _min = -1;
     private readonly _max = 1;
@@ -16,6 +18,10 @@ export class MirroredCounter<T> {
 
     get progress(): number {
         return this.isForward ? this._current + 1 : 1 - this._current;
+    }
+
+    get isCompleted(): boolean {
+        return false;
     }
 
     public update(): void {
